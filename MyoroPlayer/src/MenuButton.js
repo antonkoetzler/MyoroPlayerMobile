@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 
 const MenuButton = ({style, src, onPress}) => (
-  <TouchableOpacity style={style}>
+  <TouchableOpacity style={style} onPress={onPress}>
     <Image
       source={{ uri: src }}
       style={{
