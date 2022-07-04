@@ -1,5 +1,8 @@
 import React from 'react';
+import {selectDirectory} from 'react-native-directory-picker';
 
 export default function newPlaylist() {
-  alert("Hello, World!");
+  selectDirectory().then((path) => {
+    alert(path);
+  });
 }
