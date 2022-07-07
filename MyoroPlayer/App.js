@@ -17,8 +17,8 @@ const App: () => Node = () => {
       </View>
 
       <View style={styles.menuButtons}>
-        <MenuButton style={styles.menuButton} src={"asset:/img/OpenPlaylist.png"} onPress={newPlaylist} />
-        <MenuButton style={styles.menuButton} src={"asset:/img/NewPlaylist.png"} />
+        <MenuButton style={styles.menuButton} src={"asset:/img/OpenPlaylist.png"} />
+        <MenuButton style={styles.menuButton} src={"asset:/img/NewPlaylist.png"} onPress={newPlaylist} />
         <MenuButton style={styles.menuButton} src={"asset:/img/YouTubeToMP3.png"} />
         <MenuButton style={styles.menuButton} src={"asset:/img/MusicTransfer.png"} />
       </View>
