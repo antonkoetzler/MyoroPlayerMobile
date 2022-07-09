@@ -11,13 +11,20 @@ import MenuButton from "./src/MenuButton.js";
 import newPlaylist from "./src/Functions.js";
 
 const App: () => Node = () => {
+  const [showMain, setShowMain] = React.useState(true);
+
+  const openPlaylist = () => {
+    setShowMain(!showMain);
+    alert("Hello World");
+  };
+
   return (
-    <View style={styles.main}>
+    <View style={showMain ? styles.main : {opacity: 0}}>
       <View style={styles.songlist}>
       </View>
 
       <View style={styles.menuButtons}>
-        <MenuButton style={styles.menuButton} src={"asset:/img/OpenPlaylist.png"} />
+        <MenuButton style={styles.menuButton} src={"asset:/img/OpenPlaylist.png"} onPress={openPlaylist} />
         <MenuButton style={styles.menuButton} src={"asset:/img/NewPlaylist.png"} onPress={newPlaylist} />
         <MenuButton style={styles.menuButton} src={"asset:/img/YouTubeToMP3.png"} />
         <MenuButton style={styles.menuButton} src={"asset:/img/MusicTransfer.png"} />
