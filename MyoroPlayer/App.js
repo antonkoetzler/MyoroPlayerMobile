@@ -9,8 +9,9 @@ import {
 } from 'react-native';
 import fs from 'react-native-fs';
 
-// Functions we can store in ./src/Functions.js
+// Functions/Components we can store in ./src/Functions.js
 import MenuButton from "./src/MenuButton.js";
+import PlaylistButton from "./src/PlaylistButton.js";
 import newPlaylist from "./src/Functions.js";
 
 // These are the playlists listed on openPlaylist
@@ -57,7 +58,6 @@ const App: () => Node = () => {
         jsonData = { directory: directories[i], name: names[i] };
         playlistData.push(jsonData);
       }
-      alert(playlistData);
       setAddPlaylistData(!addPlaylistData);
     }).catch((error) => {
       // Creating .savedPlaylists if it doesn't exist
@@ -89,7 +89,7 @@ const App: () => Node = () => {
       style={showMain ? {display: "none"} : styles.playlistView}
       data={playlistData}
       extraData={addPlaylistData}
-      renderItem={({ item }) => ((<Text>{ item.name }</Text>))}
+      renderItem={({ item }) => ((<PlaylistButton name={item.name} />))}
     />
 
     </View>
@@ -117,8 +117,7 @@ const styles = StyleSheet.create({
   // Main UI for when a song is playing
   playlistView: {
     width: "100%",
-    height: "100%",
-    backgroundColor: "#7393B3"
+    height: "100%"
   },
 });
 
