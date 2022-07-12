@@ -1,7 +1,0 @@
-Playlist view
-<FlatList
-  style={{display: "none"}}
-  data={playlistData}
-  extraData={addPlaylistData}
-  renderItem={({ item }) => ((<PlaylistButton name={item.name} />))}
-/>
