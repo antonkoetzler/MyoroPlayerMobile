@@ -8,6 +8,7 @@ const Stack = createNativeStackNavigator();
 // Functions/Components we can store in ./src/Functions.js
 import SongViewScreen from "./src/SongViewScreen.js";
 import PlaylistViewScreen from "./src/PlaylistViewScreen.js";
+import SongControlScreen from "./src/SongControlScreen.js";
 
 const App: () => Node = () => {
   return (
@@ -20,6 +21,10 @@ const App: () => Node = () => {
       <Stack.Screen
         name="PlaylistView"
         component={PlaylistViewScreen}
+      />
+      <Stack.Screen
+        name="SongControl"
+        component={SongControlScreen}
       />
     </Stack.Navigator>
     </NavigationContainer>

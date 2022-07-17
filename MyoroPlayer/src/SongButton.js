@@ -4,7 +4,7 @@ import {
   Text
 } from 'react-native';
 
-const SongButton = ({ name, directory }) => (
+const SongButton = ({ name, directory, onPress }) => (
   <TouchableOpacity
     style={{
       width: "100%",
@@ -12,6 +12,7 @@ const SongButton = ({ name, directory }) => (
       borderBottomColor: "#7393B3",
       borderBottomWidth: 3
     }}
+    onPress={onPress}
   >
     <Text
       style={{

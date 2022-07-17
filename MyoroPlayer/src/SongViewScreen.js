@@ -8,8 +8,8 @@ import {
 import fs from 'react-native-fs';
 
 import MenuButton from "./MenuButton.js";
-import newPlaylist from "./Functions.js";
 import SongButton from "./SongButton.js";
+import newPlaylist from "./Functions.js";
 
 var songs = [];
 
@@ -72,7 +72,15 @@ const SongViewScreen = ({ route, navigation }) => {
         }}    
         data={songs}
         extraData={addSong}
-        renderItem={({ item }) => ((<SongButton name={item.name} directory={item.directory} />))}
+        renderItem={({ item }) => ((
+          <SongButton
+            name={item.name}
+            directory={item.directory}
+            onPress={() => {
+              navigation.navigate("SongControl", { name: item.name, directory: item.directory });
+            }}
+          />
+        ))}
       >
       </FlatList>
 
