@@ -16,10 +16,10 @@ const PlaylistViewScreen = ({ navigation }) => {
   // State to load data from .savedPlaylists
   const [addData, setAddData] = React.useState(false);
 
+  // Loading the playlists in .savedPlaylists on load
   React.useEffect(() => {
     const onLoad = navigation.addListener("focus", () => {
       playlistData = [];
-      // When PlaylistViewScreen is loaded, we list playlists here
       let cachePath = fs.DocumentDirectoryPath + "/.savedPlaylists";
       fs.readFile(cachePath).then((result) => {
         // Seperating directories
@@ -34,10 +34,9 @@ const PlaylistViewScreen = ({ navigation }) => {
         // Grabbing the names of the directories
         let names = [];
         for (var i = 0; i < directories.length; i++) {
-          temp = decodeURIComponent(directories[i]);
-          for (var o = (temp.length - 1); o >= 0; o--) {
-            if (temp[o] == ':') {
-              names.push(temp.substr(o + 1));
+          for (var o = (directories[i].length - 1); o >= 0; o--) {
+            if (directories[i][o] == '/') {
+              names.push(directories[i].substr(o + 1));
               break;
             }
           }
@@ -49,7 +48,9 @@ const PlaylistViewScreen = ({ navigation }) => {
           playlistData.push(jsonData);
         }
         setAddData(!addData);
-      }).catch((error) => { console.log(error); });
+      }).catch((error) => {
+        alert(error);
+      });
     });
     return onLoad;
   });

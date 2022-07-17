@@ -4,7 +4,7 @@ import {
   Text
 } from 'react-native';
 
-const PlaylistButton = ({name, directory, navigation}) => (
+const SongButton = ({ name, directory }) => (
   <TouchableOpacity
     style={{
       width: "100%",
@@ -12,18 +12,15 @@ const PlaylistButton = ({name, directory, navigation}) => (
       borderBottomColor: "#7393B3",
       borderBottomWidth: 3
     }}
-    onPress={() => {
-      navigation.navigate("SongView", { playlistDirectory: directory });
-    }}>
+  >
     <Text
       style={{
         fontFamily: "iosevka-regular",
-        fontSize: 30,
-        color: "#7393B3",
-        paddingLeft: 5
-      }}
-      >{name}</Text>
+          fontSize: 30,
+          color: "#7393B3",
+          paddingLeft: 5
+      }}>{name}</Text>
   </TouchableOpacity>
 );
 
-export default PlaylistButton;
+export default SongButton;

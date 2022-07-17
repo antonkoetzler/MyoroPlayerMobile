@@ -286,6 +286,7 @@ dependencies {
     }
 
     implementation project(':react-native-fs')
+    implementation project(':react-native-get-real-path')
 }
 
 if (isNewArchitectureEnabled()) {
