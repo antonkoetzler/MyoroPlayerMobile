@@ -10,9 +10,12 @@ import {
 } from "react-native";
 import TextTicker from "react-native-text-ticker";
 import Slider from "@react-native-community/slider";
+import fs from "react-native-fs";
 
 import TopBar from "../components/TopBar.js";
 import Button from "../components/Button.js";
+
+import { toggleShuffle } from "../Functions.js";
 
 const SongControl = ({ navigation, route }) => {
   const [ playlistName, setPlaylistName ] = React.useState("1234567890");
@@ -21,8 +24,10 @@ const SongControl = ({ navigation, route }) => {
   const [ sliderMaximumValue, setSliderMaximumValue ] = React.useState(100);
   const [ sliderCurrentValue, setSliderCurrentValue ] = React.useState(50);
 
-  const [ seekBackwardAmount, setSeekBackwardAmount ] = React.useState(5);
-  const [ seekForwardAmount, setSeekForwardAmount ] = React.useState(5);
+  const [ seekBackwardAmount, setSeekBackwardAmount ] = React.useState("5");
+  const [ seekForwardAmount, setSeekForwardAmount ] = React.useState("5");
+
+  const [ shuffleSrc, setShuffleSrc ] = React.useState("asset:/img/Shuffle.png");
 
   return (
     <View
@@ -90,8 +95,8 @@ const SongControl = ({ navigation, route }) => {
             <Button
               wrapperStyle={styles.buttonWrapper}
               imageStyle={styles.buttonImage}
-              src={"asset:/img/Shuffle.png"}
-              onPress={() => alert("Shuffle")}
+              src={shuffleSrc}
+              onPress={() => toggleShuffle(setShuffleSrc)}
             />
             <Button
               wrapperStyle={styles.buttonWrapper}
@@ -115,7 +120,32 @@ const SongControl = ({ navigation, route }) => {
 
           {/* Seek backward/forward */}
           <View style={{ flexDirection: "row" }}>
-            <TouchableOpacity style={styles.buttonWrapper}>
+            <TouchableOpacity
+              style={styles.buttonWrapper}
+              onLongPress={() => {
+                let newValues;
+
+                switch (seekBackwardAmount) {
+                  case "5":
+                    newValues = "10 " + seekForwardAmount;
+                    setSeekBackwardAmount("10");
+                    break;
+                  case "10":
+                    newValues = "15 " + seekForwardAmount;
+                    setSeekBackwardAmount("15");
+                    break;
+                  case "15":
+                    newValues = "5 " + seekForwardAmount;
+                    setSeekBackwardAmount("5");
+                    break;
+                }
+
+                const seekValues = fs.DocumentDirectoryPath + "/.seekValues";
+                fs.writeFile(seekValues, newValues, "utf8")
+                .then((success) => { return; })
+                .catch((error) => { console.log(error); });
+              }}
+            >
               <Image
                 style={styles.buttonImage}
                 source={{ uri: "asset:/img/SeekBackward.png" }}
@@ -132,7 +162,32 @@ const SongControl = ({ navigation, route }) => {
               >{seekBackwardAmount}</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.buttonWrapper}>
+            <TouchableOpacity
+              style={styles.buttonWrapper}
+              onLongPress={() => {
+                let newValues;
+
+                switch (seekForwardAmount) {
+                  case "5":
+                    newValues = seekBackwardAmount + " 10";
+                    setSeekForwardAmount("10");
+                    break;
+                  case "10":
+                    newValues = seekBackwardAmount + " 15";
+                    setSeekForwardAmount("15");
+                    break;
+                  case "15":
+                    newValues = seekBackwardAmount + " 5";
+                    setSeekForwardAmount("5");
+                    break;
+                }
+
+                const seekValues = fs.DocumentDirectoryPath + "/.seekValues";
+                fs.writeFile(seekValues, newValues, "utf8")
+                .then((success) => { return; })
+                .catch((error) => { console.log(error); });
+              }}
+            >
               <Image
                 style={styles.buttonImage}
                 source={{ uri: "asset:/img/SeekForward.png" }}

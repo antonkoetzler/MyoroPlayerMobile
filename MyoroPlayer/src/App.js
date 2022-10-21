@@ -25,6 +25,26 @@ const App: () => Node = () => {
       .then((success) => { return; })
       .catch((error) => { console.log(error); });
     });
+
+    // Creating .shuffle
+    const shuffle = fs.DocumentDirectoryPath + "/.shuffle";
+    fs.readFile(shuffle)
+    .then((contents) => { return; })
+    .catch((error) => {
+      fs.writeFile(shuffle, "0", "utf8")
+      .then((success) => { return; })
+      .catch((error) => { console.log(error); });
+    });
+
+    // Creating .seekValues
+    const seekValues = fs.DocumentDirectoryPath + "/.seekValues";
+    fs.readFile(seekValues)
+    .then((contents) => { return; })
+    .catch((error) => {
+      fs.writeFile(seekValues, "5 5", "utf8")
+      .then((success) => { return; })
+      .catch((error) => { console.log(error); })
+    });
   }, []);
 
   return (

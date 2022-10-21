@@ -109,3 +109,22 @@ async function getSongsFromDirectory (directory) {
     }
   }
 }
+
+export function toggleShuffle (setState) {
+  const shuffle = fs.DocumentDirectoryPath + "/.shuffle";
+  fs.readFile(shuffle).then((shuffleValue) => {
+    let newShuffleValue;
+
+    if (shuffleValue == "0") {
+      newShuffleValue = "1";
+      setState("asset:/img/ShuffleHover.png");
+    } else {
+      newShuffleValue = "0";
+      setState("asset:/img/Shuffle.png");
+    }
+
+    fs.writeFile(shuffle, newShuffleValue, "utf8")
+    .then((success) => { return; })
+    .catch((error) => { console.log(error); });
+  }).catch((error) => { console.log(error); });
+}
