@@ -21,4 +21,8 @@ export async function PlaybackService () {
     const song = await nextSong();
     if (song != null) playSong(song, "Direct", false);
   });
+
+  TrackPlayer.addEventListener(Event.RemoteStop, () => {
+    TrackPlayer.stop();
+  });
 }
