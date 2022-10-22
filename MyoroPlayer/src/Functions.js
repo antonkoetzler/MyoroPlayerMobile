@@ -3,6 +3,7 @@ import { PermissionsAndroid } from "react-native";
 import { selectDirectory } from "react-native-directory-picker";
 import RNGRP from "react-native-get-real-path";
 import fs from "react-native-fs";
+import jsmediatags from "@avi-l/jsmediatags";
 
 // Requests
 // - READ_EXTERNAL_STORAGE
@@ -127,4 +128,13 @@ export function toggleShuffle (setState) {
     .then((success) => { return; })
     .catch((error) => { console.log(error); });
   }).catch((error) => { console.log(error); });
+}
+
+export function getTags (path) {
+  return new Promise((resolve, reject) => {
+    new jsmediatags.Reader(path).read({
+      onSuccess: (tag) => { resolve(tag); },
+      onError: (error) => { reject(error); }
+    });
+  });
 }
