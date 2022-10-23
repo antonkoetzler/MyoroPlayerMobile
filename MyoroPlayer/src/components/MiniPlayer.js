@@ -4,7 +4,8 @@ import {
   View,
   Image,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  Easing
 } from "react-native";
 import TextTicker from "react-native-text-ticker";
 
@@ -49,6 +50,9 @@ const MiniPlayer = ({
         fontSize: 25,
         color: "#7393B3"
       }}
+      duration={5750}
+      repeatSpacer={30}
+      easing={Easing.linear}
     >{songName}</TextTicker>
 
     <View style={{ flexDirection: "row" }}>

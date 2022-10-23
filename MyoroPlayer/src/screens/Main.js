@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import BackgroundThread, { BackgroundThreadPriority } from "@gennadysx/react-native-background-thread";
 import Dialog from "react-native-dialog";
-import TrackPlayer, { State } from "react-native-track-player";
+import TrackPlayer, { State, useTrackPlayerEvents, Event } from "react-native-track-player";
 
 import TopBar from "../components/TopBar.js";
 import Button from "../components/Button.js";
@@ -46,20 +46,22 @@ const Main = ({ navigation, route }) => {
   const [ miniPlayerAlbumCover, setMiniPlayerAlbumCover ] = React.useState("asset:/img/DefaultAlbumCover.png");
   const [ miniPlayerPlaySrc, setMiniPlayerPlaySrc ] = React.useState("asset:/img/Play.png");
 
-  React.useEffect(() => {
-    const interval = setInterval(async () => {
-      const currentSong = await getCurrentSong();
-      if (currentSong != currentlyPlaying)
-        BackgroundThread.run(() => {
-          setupMiniPlayer(currentSong);
-        }, BackgroundThreadPriority.MIN);
-    }, 1000);
+  useTrackPlayerEvents([ Event.PlaybackTrackChanged ], async (event) => {
+    const currentSong = await getCurrentSong();
+    if (currentSong != currentlyPlaying) {
+      BackgroundThread.run(() => {
+        setupMiniPlayer(currentSong);
+      }, BackgroundThreadPriority.MIN);
+    }
+  });
 
+  React.useEffect(() => {
     const onload = navigation.addListener("focus", async () => {
       const state = await TrackPlayer.getState();
       if (state == State.Ready
         || state == State.Playing
-        || state == State.Paused)
+        || state == State.Paused
+        && !showModal)
         BackgroundThread.run(() => {
           setupMiniPlayer();
         }, BackgroundThreadPriority.MIN);
@@ -88,10 +90,7 @@ const Main = ({ navigation, route }) => {
       }
     });
 
-    return () => {
-      clearInterval(interval);
-      return onload, onblur;
-    };
+    return onload, onblur;
   }, [route.params]);
 
   async function setupMiniPlayer (path) {

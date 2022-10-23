@@ -11,7 +11,7 @@ import {
 import TextTicker from "react-native-text-ticker";
 import Slider from "@react-native-community/slider";
 import fs from "react-native-fs";
-import TrackPlayer, { State } from "react-native-track-player";
+import TrackPlayer, { useTrackPlayerEvents, State, Event } from "react-native-track-player";
 import BackgroundThread, { BackgroundThreadPriority } from "@gennadysx/react-native-background-thread";
 
 import TopBar from "../components/TopBar.js";
@@ -44,22 +44,23 @@ const SongControl = ({ navigation, route }) => {
   const [ shuffleSrc, setShuffleSrc ] = React.useState("asset:/img/Shuffle.png");
   const [ playSrc, setPlaySrc ] = React.useState("asset:/img/Play.png");
 
-  React.useEffect(() => {
-    // Slider & launching app from background mode again
-    const interval = setInterval(async () => {
-      const duration = await TrackPlayer.getDuration();
-      setSliderMaximumValue(duration);
-      const position = await TrackPlayer.getPosition();
-      setSliderCurrentValue(position);
-
-      // If the user comes back from background mode & song has changed
+  useTrackPlayerEvents([ Event.PlaybackTrackChanged, Event.PlaybackProgressUpdated ], async (event) => {
+    if (event.buffer == undefined) {
       const currentSong = await getCurrentSong();
-      if (currentSong != currentlyPlaying)
+      if (currentSong != currentlyPlaying) {
         BackgroundThread.run(() => {
           prepareUI(currentSong);
         }, BackgroundThreadPriority.MIN);
-    }, 1000);
+      }
+    } else {
+      const duration = await TrackPlayer.getDuration();
+      const position = await TrackPlayer.getPosition();
+      setSliderMaximumValue(duration);
+      setSliderCurrentValue(position);
+    }
+  });
 
+  React.useEffect(() => {
     const onload = navigation.addListener("focus", async () => {
       // Either route.params.directory or no dir (current TrackPlayer track)
       // No dir is caused by the user clicking the MiniPlayer to return to SongControl
@@ -79,10 +80,7 @@ const SongControl = ({ navigation, route }) => {
       route.params = undefined;
     });
 
-    return () => {
-      clearInterval(interval);
-      return onload;
-    };
+    return onload;
   }, [route.params]);
 
   async function prepareUI (path) {
