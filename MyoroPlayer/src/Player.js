@@ -81,14 +81,12 @@ export async function nextSong () {
   const trackPlayerQueue = await TrackPlayer.getQueue();
   const currentSong = await TrackPlayer.getCurrentTrack();
   if (trackPlayerQueue.length > 0)
-    if (trackPlayerQueue[currentSong].mode != "Previous")
+    if (trackPlayerQueue[currentSong].id != "Previous")
       LDMS = trackPlayerQueue[currentSong].url.substr(8, trackPlayerQueue[currentSong].url.length);
 
   // If the current track is "Previous" mode, we look in previous array
-  if (previous.length > 0) {
+  if (LDMS == null && previous.length > 0)
     LDMS = previous[previous.length - 1];
-    previous.pop();
-  }
 
   // Only logic point where we cannot find a next song
   if (LDMS == null) return;
